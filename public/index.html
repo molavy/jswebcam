@@ -2,8 +2,8 @@
 <html>
     <head>
         <title>Hangouts</title>
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-        <script src="socket.io/socket.io.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+        <script src="socket.io/socket.io-1.4.5.js"></script>
     </head>
     <body>
         <!-- Receiver -->
@@ -17,11 +17,12 @@
         <div id="log"></div>
 
         <script>
+			navigator.getUserMedia = navigator.getUserMedia || navigator.mozGetUserMedia || navigator.webkitGetUserMedia;
             $(document).ready(function() {
                 var c_width = 100;
                 var c_height = 200;
 
-                var SERVER_URL = 'http://example.org:8081';
+                var SERVER_URL = 'https://192.168.1.101:8086';
 
                 // Setup elements
                 var receiver = document.getElementById('receiver');
@@ -37,6 +38,7 @@
 
                 // Socket connection
                 var socket = io.connect(SERVER_URL);
+                
 
                 log('Ready to go');
 
@@ -61,7 +63,7 @@
                 if (navigator.getUserMedia) {
                     log('Browser capable of streaming media');
 
-                    navigator.getUserMedia('video', function(stream) { video.src = stream; }, function(error) { log('Capture error ' + error); });
+                    navigator.getUserMedia({audio:false,video:true}, function(stream) { video.src = URL.createObjectURL(stream); }, function(error) { log('Capture error ' + error); });
 
                     function draw(v, ctx, w, h) {
                         ctx.drawImage(v, 0, 0, w, h);

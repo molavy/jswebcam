@@ -1,7 +1,14 @@
 var sys = require('util');
-var io = require('socket.io').listen(8081);
-var http = require('http');
+var fs = require('fs');
+var http = require('https');
+var serverConfig = {
+	key: fs.readFileSync('key.pem'),
+    cert: fs.readFileSync('cert.pem'),
+};
 
+server=http.createServer(serverConfig,function(request, response) {}).listen(8086);
+var io = require('socket.io').listen(server);
+io.set('transports', ["websocket", "polling"])
 io.set('log level', 0);
 
 var clients = {};
